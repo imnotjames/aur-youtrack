@@ -1,0 +1,18 @@
+[Unit]
+Description=YouTrack Server
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/conf.d/youtrack
+ExecStart=/usr/bin/youtrack start
+ExecStop=/usr/bin/youtrack stop
+Type=forking
+PIDFile=/var/run/youtrack/youtrack.pid
+Restart=no
+TimeoutSec=30
+RemainAfterExit=yes
+User=youtrack
+
+[Install]
+WantedBy=multi-user.target
+

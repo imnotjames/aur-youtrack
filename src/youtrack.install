@@ -1,0 +1,27 @@
+post_install() {
+    echo "Creating user and group for youtrack..."
+
+    getent group youtrack &>/dev/null || groupadd -r youtrack >/dev/null
+    getent passwd youtrack &>/dev/null || useradd -r -g youtrack -d '/usr/share/java/youtrack/' -s /bin/false -G youtrack youtrack >/dev/null
+
+    chown -R youtrack:youtrack '/var/lib/youtrack'
+
+    echo "To start your instance:"
+    echo "  systemctl start youtrack"
+    echo 
+    echo "After that you can access YouTrack by opening http://localhost:8080/"
+}
+
+pre_remove() {
+    "Stopping and disabling youtrack service"
+    systemctl stop youtrack.service
+    systemctl disable youtrack.service
+}
+
+post_remove() {
+    echo "Removing youtrack user and group..."
+    getent passwd youtrack &>/dev/null && userdel youtrack >/dev/null
+    getent group youtrack &>/dev/null && groupdel youtrack >/dev/null
+
+    echo "Please check for remaining files in /var/lib/youtrack
+}

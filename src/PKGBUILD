@@ -1,0 +1,32 @@
+pkgname=youtrack
+pkgver=6.5.16807
+pkgrel=1
+pkgdesc="Issue Tracker and Agile Project Management Tool" 
+url="https://www.jetbrains.com/youtrack/" 
+license=('nonfree')
+arch=(any)
+depends=('java-runtime') 
+install="$pkgname.install"
+source=("https://download.jetbrains.com/charisma/${pkgname}-${pkgver}.jar"
+        'youtrack.service'
+        'youtrack.conf'
+        'youtrack.sh')
+sha256sums=('ce2314e5cf581d4efe9343a6b01a33806496e0c3dd47e8c457832d4f8675e23e'
+            'e9ecc37f43b944aaa9b37bef402aaf57e26f9dc43599ecaa3fe1eedbac10bef9'
+            'a3b1cc2c428cf6ff5cfb01c5260e0cbe875b63a845346c74ccefd272a2c576d7'
+            '7b3583193a6c7c4864ff1c95eaaaa267733c1d5dd0caeca035f39ac6b07c445d')
+noextract=("${pkgname}-${pkgver}.jar")
+
+
+package() { 
+  mkdir -p "${pkgdir}/var/lib/youtrack/"
+  mkdir -p "${pkgdir}/usr/share/java/${pkgname}"
+  mkdir -p "${pkgdir}/usr/bin"
+
+  cp -Lv "${srcdir}/${pkgname}-${pkgver}.jar" "${pkgdir}/usr/share/java/${pkgname}/${pkgname}.jar"
+
+  echo -e "#!/bin/bash\njava -jar /opt/${pkgname}/${pkgname}.jar \$@" > "${pkgdir}/usr/bin/${pkgname}"
+  chmod a+x "${pkgdir}/usr/bin/${pkgname}"
+}
+
+
